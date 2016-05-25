@@ -139,7 +139,7 @@
       undefined
   */
   function searchOMDB(movieTitle, success, error){
-    let baseUrl = "http://omdbapi.com/?type=movie&s=";
+    let baseUrl = "//omdbapi.com/?type=movie&s=";
     baseXHRGet(baseUrl + movieTitle, success, error);
   }
 
@@ -153,7 +153,7 @@
                         receives no parameters
   */
   function getMovieById(imdbID, success, error){
-    let baseUrl = "http://omdbapi.com/?type=movie&i=";
+    let baseUrl = "//omdbapi.com/?type=movie&i=";
     baseXHRGet(baseUrl + imdbID, success, error);
   }
 
