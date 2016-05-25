@@ -37,6 +37,6 @@ app.post('/favorites', function(req, res){
   res.send(data);
 });
 //      ⇣ Function is actually called app.listen, not app.list
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("Listening on port 3000");
 });
