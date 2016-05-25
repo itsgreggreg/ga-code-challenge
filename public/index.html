@@ -4,12 +4,24 @@
         <meta charset="utf-8">
         <title></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script>
-        </script>
         <style>
+          body{ margin: 0; font-family: sans-serif;}
+          *{ box-sizing: border-box; }
+          .row{ width: 800px; margin: auto;}
+          h1{margin: 0; padding:0; color: white; font-weight: normal;}
+          header{ background-color: #7A1EA1; }
+          header > div {display: flex; align-items: center; padding: 10px;}
+          header > div > input { margin-left: auto;}
         </style>
     </head>
     <body>
-
+      <header>
+        <div class="row">
+          <h1>OMDBapi Searcher</h1>
+          <input id="searchInput" type="text" placeholder="movie title">
+          <button id="searchButton" >Search</button>
+        <div>
+      </header>
+      <script src="app.js"></script>
     </body>
 </html>
