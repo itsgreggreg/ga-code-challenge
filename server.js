@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 // Parenthesis were mis-matched     this one was forgotten ⇣
 app.use('/', express.static(path.join(__dirname, 'public')));
 
+// Get the User's favorites
 app.get('/favorites', function(req, res){
   var data = fs.readFileSync('./data.json');
   res.setHeader('Content-Type', 'application/json');
@@ -20,9 +21,11 @@ app.get('/favorites', function(req, res){
 // ⇣ and the closing paren for app.get were forgotten
 });
 
-app.get('favorites', function(req, res){
-  if(!req.body.name || !req.body.oid){
-    res.send("Error");
+// Record a new favorite
+//   ⇣  Method should be POST to write data
+app.post('/favorites', function(req, res){
+  if(!req.body.imdbID || !req.body.Title || !req.body.Year){
+    res.send("{Error:'Must have an imdbID, Title, and Year.'}");
     return
 //⇣ Closing curly bracket for the if block was forgotten
   }
