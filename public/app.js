@@ -36,6 +36,7 @@
       // Build and insert the list of movies
       searchResults.innerHTML = "<h2>Search Results</h2>"+buildMovieList(movies);
     };
+    // Now we run the actual search
     searchOMDB(movieTitle, successFunction, searchError);
     // We must return false to prevent the form from actually submitting
     return false;
@@ -43,6 +44,9 @@
 
   // This function runs when the search results are clicked
   searchResults.onclick = function(e){
+    // We've got a list of movies in the global 'movies' variable
+    // we've also attached each movies index to the li item
+    // we grab that index so we can grab the movie details
     let movieIndex = e.target.getAttribute("data-index");
     let successFunction = function (results) {
       movieDetails.innerHTML = buildMovieDetails(results, movieIndex);

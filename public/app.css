@@ -6,7 +6,7 @@ body{
   box-sizing: border-box;
 }
 .row{
-  width: 800px;
+  max-width: 800px;
   margin: auto;
 }
 h1{
@@ -29,10 +29,35 @@ header > div > form{
 #favoritesButton{
   margin-left: 2rem;
 }
+main{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+main > * {
+  max-width: 50%;
+  min-width: 375px;
+}
+ul{
+  list-style: outside none none;
+  margin: 0px;
+  padding: 0px;
+}
 li{
+  background-color: #8bc34a;
+  color: black;
   padding: 5px;
   cursor: pointer;
+  padding: 5px;
+  text-align: center;
+  margin: 2px;
 }
 li:hover{
-  background-color: #bbb;
+  background-color: #cddc39;
+}
+
+@media (max-width:800px){
+  main{
+    justify-content: center;
+  }
 }
