@@ -118,7 +118,9 @@
     details.map(function(detail){
       html += `<div><strong>${detail}: </strong>${movie[detail]}</div>`;
     });
-    html += `<div><img src="${movie.Poster}"></div>`;
+    if(movie.Poster && movie.Poster !== "N/A"){
+      html += `<div><img src="${movie.Poster}"></div>`;
+    }
     return html;
   }
 
