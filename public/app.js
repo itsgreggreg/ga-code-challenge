@@ -39,7 +39,11 @@
   // This function runs when the search results are clicked
   searchResults.onclick = function(e){
     let movieIndex = e.target.getAttribute("data-index");
-    movieDetails.innerHTML = buildMovieDetails(movies[movieIndex]);
+    let successFunction = function(results){
+      console.log(results)
+      movieDetails.innerHTML = buildMovieDetails(results);
+    }
+    getMovieById(movies[movieIndex].imdbID, successFunction);
   }
 
   //
@@ -76,12 +80,13 @@
       html to be inserted into the page
   */
   function buildMovieDetails(movie){
-    console.log(movie)
-    return `<h3>${movie.Title}</h3>
-            <div><strong>Year: </strong>${movie.Year}</div>
-            <div><strong>IMDB ID: </strong>${movie.imdbID}</div>
-            <div><img src="${movie.Poster}"></div>
-            `
+    let details = ['Genre', 'Rated', 'Released', 'Runtime', 'Director'];
+    let html = `<h3>${movie["Title"]}</h3>`;
+    details.map(function(detail){
+      html += `<div><strong>${detail}: </strong>${movie[detail]}</div>`;
+    })
+    html += `<div><img src="${movie.Poster}"></div>`;
+    return html;
   }
 
 
@@ -90,7 +95,7 @@
   //
 
   /*
-    A function to search the omdbapi for a specific movie title
+    A function to search the omdbapi for a movie title
     Parameters:
      movieTitle : string - the movie title to search for
      success : function - a function to call if the request was successful
@@ -102,10 +107,35 @@
   */
   function searchOMDB(movieTitle, success, error){
     let baseUrl = "http://omdbapi.com/?type=movie&s=";
+    baseXHRGet(baseUrl + movieTitle, success, error)
+  }
+
+  /*
+    A function to search the omdbapi for a specific movie by imbdID
+    Parameters:
+     imdbID : string - the imdbID to search for
+     success : function - a function to call if the request was successful
+                          receives an array of movie objects as it's only parameter
+     error : function - a function to call if the request failed
+                        receives no parameters
+    Returns:
+      undefined
+  */
+  function getMovieById(imdbID, success, error){
+    let baseUrl = "http://omdbapi.com/?type=movie&i=";
+    baseXHRGet(baseUrl + imdbID, success, error)
+  }
+
+  /*
+    Does all the cross site requesting and callbacking
+    Parameters:
+      url : string - The url to call
+      success : function - a function to call if the request is successful
+      error : function - a function to call if the request failes
+  */
+  function baseXHRGet(url, success, error){
     let request = new XMLHttpRequest();
-
-    request.open('GET', baseUrl + movieTitle, true);
-
+    request.open('GET', url, true);
     request.onload = function() {
       let data = JSON.parse(request.responseText);
       // if the status code is in the success region and there's no error
