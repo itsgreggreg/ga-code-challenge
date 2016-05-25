@@ -4,24 +4,47 @@
   // we put our browser into strict-mode
   "use strict";
 
-  // First we need to grab references to our app's components
+  // Set up global vars for our application
+  let movies = [];
+
+  // Setup references to our app's components
   let searchForm = document.getElementById("searchForm");
   let searchInput = document.getElementById("searchInput");
   let searchButton = document.getElementById("searchButton");
   let searchResults = document.getElementById("searchResults");
+  let movieDetails = document.getElementById("movieDetails");
 
   // Now we attach handlers to events our components may fire
+
+  // This function runs when the search form is submitted
   searchForm.onsubmit = function(){
+    // Clear the search results
+    movies = [];
+    // We grab the search term from the input
     let movieTitle = searchInput.value;
-    let successFunction = function(movies){
-      console.log(movies)
-      searchResults.innerHTML = buildMovieList(movies.Search);
+    // Setup what to do when we get some search results
+    let successFunction = function(results){
+      // Grab the movies from the results
+      movies = results.Search;
+      // Sort the movies by year
+      movies.sort((a,b) => a.Year*1 - b.Year*1);
+      // Build and insert the list of movies
+      searchResults.innerHTML = buildMovieList(movies);
     };
     searchOMDB(movieTitle, successFunction, searchError);
+    // We must return false to prevent the form from actually submitting
     return false;
   }
 
+  // This function runs when the search results are clicked
+  searchResults.onclick = function(e){
+    let movieIndex = e.target.getAttribute("data-index");
+    movieDetails.innerHTML = buildMovieDetails(movies[movieIndex]);
+  }
+
+  //
   // UI FUNCTIONS
+  //
 
   /*
     Simply displays No Results in the searchResults if called
@@ -39,14 +62,32 @@
   */
   function buildMovieList(movies){
     let ul = '<ul id="movieList">'
-    movies.map(function(movie){
-      ul += '<li>' + movie.Year + ' - ' + movie.Title + '</li>';
+    movies.map(function(movie,index){
+      ul += '<li data-index='+index+'>' + movie.Year + ' - ' + movie.Title + '</li>';
     })
     return ul + '</ul>'
   }
 
+  /*
+    Takes a movie object and builds the ui to display it
+    Paramaters:
+      movie : Object - a movie object returned from OMDBapi
+    Returns:
+      html to be inserted into the page
+  */
+  function buildMovieDetails(movie){
+    console.log(movie)
+    return `<h3>${movie.Title}</h3>
+            <div><strong>Year: </strong>${movie.Year}</div>
+            <div><strong>IMDB ID: </strong>${movie.imdbID}</div>
+            <div><img src="${movie.Poster}"></div>
+            `
+  }
 
+
+  //
   // HELPER FUNCTIONS
+  //
 
   /*
     A function to search the omdbapi for a specific movie title
@@ -60,7 +101,7 @@
       undefined
   */
   function searchOMDB(movieTitle, success, error){
-    let baseUrl = "http://omdbapi.com/?s=";
+    let baseUrl = "http://omdbapi.com/?type=movie&s=";
     let request = new XMLHttpRequest();
 
     request.open('GET', baseUrl + movieTitle, true);
